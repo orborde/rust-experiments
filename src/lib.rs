@@ -26,11 +26,14 @@ mod tests {
         buf
     }
 
+    const RUNS: i32 = 1000000;
     #[bench]
     fn bench_usize(b: &mut Bencher) {
         let mut buf = mkarr();
         b.iter(|| {
-            read_usize(&mut buf)
+            for _ in 0..RUNS {
+                test::black_box(read_usize(&mut buf));
+            }
         })
     }
 
@@ -38,7 +41,9 @@ mod tests {
     fn bench_slice(b: &mut Bencher) {
         let mut buf = mkarr();
         b.iter(|| {
-            read_slice(&mut buf).len()
+            for _ in 0..RUNS {
+                test::black_box(read_slice(&mut buf));
+            }
         })
     }
 }
