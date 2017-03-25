@@ -1,0 +1,6 @@
+[package]
+name = "slice-io"
+version = "0.1.0"
+authors = ["William Ehlhardt <williamehlhardt@gmail.com>"]
+
+[dependencies]
