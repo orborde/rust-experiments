@@ -1,13 +1,13 @@
 use futures::{
-    future::FutureExt, // for `.fuse()`
+    //future::FutureExt, // for `.fuse()`
     future::TryFutureExt,
     executor,
     pin_mut,
     join,
 };
 
-async fn task_one() -> Result<&'static str,&'static str> { Ok("ONE") }
-async fn task_two() -> Result<&'static str,&'static str> { Ok("TWO") }
+async fn task_one() -> Result<&'static str,&'static str> { println!("exec-one"); Ok("ONE") }
+async fn task_two() -> Result<&'static str,&'static str> { println!("exec-two"); Ok("TWO") }
 
 async fn race_tasks() {
     let t1 = task_one();
@@ -16,8 +16,10 @@ async fn race_tasks() {
     //pin_mut!(t1, t2);
 
     join!(
-        t1.and_then(|_| async { println!("task one completed first"); Ok("done") }),
-        t2.and_then(|_| async { println!("task two completed first"); Ok("done") }),
+        //t1.map_ok(|_| async { println!("task one completed first") }),
+        //t2.map_ok(|_| async { println!("task two completed first") }),
+        async { t1.await.map(|_| println!("task one finished")) },
+        async { t2.await.map(|_| println!("task two finished")) },
     );
 }
 
